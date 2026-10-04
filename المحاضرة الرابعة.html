@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استراتيجيات التدريس الفعال</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#0d9488', // Teal 600
+                        primary_dark: '#0f766e', // Teal 700
+                        primary_light: '#ccfbf1', // Teal 50
+                        secondary: '#d97706', // Amber 600
+                        accent: '#f59e0b', // Amber 500
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Styling */
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.8;
+        }
+
+        /* Smooth Transitions */
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card Hover Effects */
+        .hover-card {
+            transition: all 0.3s ease;
+        }
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Concept Map Hierarchy Styles */
+        .concept-map {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            background: linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%);
+            border-radius: 1rem;
+            border: 1px solid #ccfbf1;
+        }
+        .cm-node {
+            background: white;
+            border: 2px solid var(--tw-colors-primary);
+            color: var(--tw-colors-primary-dark);
+            padding: 0.75rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 6px -1px rgba(13, 148, 136, 0.2);
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            min-width: 150px;
+        }
+        .cm-connection-text {
+            background: white;
+            padding: 0.25rem 1rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            color: var(--tw-colors-secondary);
+            border: 1px solid var(--tw-colors-secondary);
+            margin: 0.5rem 0;
+            z-index: 10;
+        }
+        .cm-level {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            position: relative;
+            width: 100%;
+        }
+        .cm-line-v {
+            width: 2px;
+            height: 3rem;
+            background-color: var(--tw-colors-primary);
+        }
+        .cm-branch-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        /* Top horizontal connector line for branches */
+        .cm-level-branches::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background-color: var(--tw-colors-primary);
+        }
+
+        /* Process Flow Styles */
+        .process-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .process-flow {
+                flex-direction: row;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                align-items: stretch;
+            }
+        }
+        .process-step {
+            flex: 1;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border-top: 4px solid var(--tw-colors-primary);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            text-align: center;
+            position: relative;
+        }
+        .process-icon {
+            width: 4rem;
+            height: 4rem;
+            background: var(--tw-colors-primary-light);
+            color: var(--tw-colors-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: -3rem auto 1rem auto;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        .process-arrow {
+            display: none;
+        }
+        @media (min-width: 768px) {
+            .process-arrow {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--tw-colors-secondary);
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="antialiased selection:bg-primary-light selection:text-primary-dark">
+
+    <header class="bg-gradient-to-br from-primary_dark to-primary text-white py-16 px-4 md:px-8 shadow-xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 -mt-16 -mr-16 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -mb-16 -ml-16 w-48 h-48 bg-white opacity-10 rounded-full blur-2xl"></div>
+        
+        <div class="max-w-7xl mx-auto relative z-10 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">استراتيجيات التدريس الفعال</h1>
+            <p class="text-lg md:text-xl text-primary_light mb-12 max-w-3xl mx-auto">دليل تفاعلي شامل مبني على المحاضرة الرابعة، يغطي أهم الاستراتيجيات التعليمية لتحسين وتطوير العملية التربوية.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-right">
+                <!-- الأهداف التدريسية -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl shadow-lg">
+                    <div class="flex items-center gap-3 mb-4 border-b border-white/20 pb-4">
+                        <i class="fas fa-bullseye text-accent text-2xl"></i>
+                        <h2 class="text-2xl font-bold">الأهداف التدريسية</h2>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-2"><i class="fas fa-check-circle text-primary_light mt-1.5 text-sm"></i> <span>فهم واستيعاب استراتيجيات التدريس المتنوعة وتطبيقاتها.</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check-circle text-primary_light mt-1.5 text-sm"></i> <span>تطبيق استراتيجية العروض العملية بفاعلية لاكتساب المهارات.</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check-circle text-primary_light mt-1.5 text-sm"></i> <span>تصميم خرائط مفاهيمية لتبسيط وتنظيم البنية المعرفية.</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check-circle text-primary_light mt-1.5 text-sm"></i> <span>توظيف استراتيجية "فكر-زاوج-شارك" لتعزيز التعلم التعاوني.</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-check-circle text-primary_light mt-1.5 text-sm"></i> <span>تقويم أداء المتعلمين والمواقف التعليمية بناءً على معايير علمية.</span></li>
+                    </ul>
+                </div>
+
+                <!-- أسئلة للمناقشة -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl shadow-lg">
+                    <div class="flex items-center gap-3 mb-4 border-b border-white/20 pb-4">
+                        <i class="fas fa-comments text-accent text-2xl"></i>
+                        <h2 class="text-2xl font-bold">أسئلة للمناقشة</h2>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-2"><i class="fas fa-question-circle text-primary_light mt-1.5 text-sm"></i> <span>كيف يمكن للعروض العملية أن تزيد من دافعية ونشاط المتعلم؟</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-question-circle text-primary_light mt-1.5 text-sm"></i> <span>ما هي أبرز التحديات التي قد تواجه المعلم عند تطبيق خرائط المفاهيم؟</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-question-circle text-primary_light mt-1.5 text-sm"></i> <span>كيف تسهم استراتيجية "فكر-زاوج-شارك" في مراعاة الفروق الفردية؟</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-question-circle text-primary_light mt-1.5 text-sm"></i> <span>ما هو الدور الأمثل للمعلم لضمان نجاح العرض العملي؟</span></li>
+                        <li class="flex items-start gap-2"><i class="fas fa-question-circle text-primary_light mt-1.5 text-sm"></i> <span>كيف نضمن تقويماً عادلاً وشاملاً لخريطة المفاهيم التي يبنيها الطالب؟</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-8 py-12">
+        
+        <!-- Tabs Navigation -->
+        <div class="flex flex-wrap md:flex-nowrap gap-2 md:gap-4 justify-center mb-12 border-b-2 border-gray-200 pb-4" role="tablist">
+            <button onclick="openTab(event, 'tab1')" class="tab-btn active px-6 py-3 rounded-t-lg md:rounded-lg font-bold text-lg md:text-xl transition-all duration-300 bg-primary text-white shadow-md w-full md:w-auto" id="btn-tab1">
+                <i class="fas fa-chalkboard-teacher ml-2"></i> استراتيجية العروض العملية
+            </button>
+            <button onclick="openTab(event, 'tab2')" class="tab-btn px-6 py-3 rounded-t-lg md:rounded-lg font-bold text-lg md:text-xl transition-all duration-300 bg-gray-200 text-gray-600 hover:bg-gray-300 w-full md:w-auto" id="btn-tab2">
+                <i class="fas fa-sitemap ml-2"></i> استراتيجية خرائط المفاهيم
+            </button>
+            <button onclick="openTab(event, 'tab3')" class="tab-btn px-6 py-3 rounded-t-lg md:rounded-lg font-bold text-lg md:text-xl transition-all duration-300 bg-gray-200 text-gray-600 hover:bg-gray-300 w-full md:w-auto" id="btn-tab3">
+                <i class="fas fa-users ml-2"></i> استراتيجية فكر / زاوج / شارك
+            </button>
+        </div>
+
+        <div id="tab1" class="tab-content active">
+            
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8 hover-card">
+                <h3 class="text-3xl font-bold text-primary mb-4 flex items-center"><i class="fas fa-info-circle text-2xl ml-3 text-secondary"></i> مفهوم الاستراتيجية</h3>
+                <p class="text-lg text-gray-700 leading-relaxed text-justify mb-4">
+                    تعد استراتيجية <strong>العروض العملية (Practical demonstration strategy)</strong> أو البيان العملي من الاستراتيجيات المهمة في تعلم المهارات الحركية، وفيها يقوم المعلم بأداء الحركة أو المهارة أمام تلاميذه. ويمكن أيضاً عرض المهارة من خلال شريط تعليمي أو وسيلة عرض مناسبة، ثم يُطلب من المتعلمين أداءها كما شاهدوها. 
+                </p>
+                <p class="text-lg text-gray-700 leading-relaxed text-justify">
+                    أثناء ذلك يقوم المعلم بمتابعة أدائهم وتوجيههم وتصحيح أخطائهم. وبذلك يقوم المتعلمون بدور إيجابي ونشط، بينما يقتصر دور المعلم على الإرشاد والتوجيه. وهي نشاط يقوم به المعلم أو المتعلمون أو زائر متخصص لتوضيح فكرة أو قانون باستخدام وسائل الإيضاح بجانب الشرح النظري.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <!-- الاستخدامات -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 hover-card">
+                    <h3 class="text-2xl font-bold text-primary mb-6 flex items-center"><i class="fas fa-list-ul text-xl ml-3 text-secondary"></i> استخدامات العروض العملية</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i> <span>التدريب على العمليات الحركية (كالتمارين الرياضية وغيرها).</span></li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i> <span>التدريب على المشكلات ومهارات التحليل.</span></li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i> <span>توضيح المبادئ (لماذا نعمل هذا الشيء بهذه الطريقة؟).</span></li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i> <span>التدريب على تشغيل الأجهزة (كالحاسب الآلي وأجهزة العرض).</span></li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i> <span>التدريب على أسلوب الفريق في العمل.</span></li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i> <span>بيان المستوى النموذجي الفني لشيء ما.</span></li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check text-primary mt-1"></i> <span>التدريب على إجراءات السلامة.</span></li>
+                    </ul>
+                </div>
+
+                <!-- الخطوات -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 hover-card">
+                    <h3 class="text-2xl font-bold text-primary mb-6 flex items-center"><i class="fas fa-shoe-prints text-xl ml-3 text-secondary"></i> خطوات التنفيذ</h3>
+                    <p class="mb-4 text-gray-600">تبدأ بالتحضير الجيد وتجهيز الأدوات، وتسير الخطوات كالتالي:</p>
+                    <ol class="relative border-r-2 border-primary mr-3 pr-6 space-y-6">
+                        <li class="mb-2">
+                            <span class="absolute -right-[11px] top-1 w-5 h-5 bg-primary rounded-full border-4 border-white"></span>
+                            <h4 class="font-bold text-gray-800">التهيئة والأداء الأولي</h4>
+                            <p class="text-sm text-gray-600 mt-1">يهيئ المعلم المتعلمين، ثم يؤدي الحركة أمامهم (أو يعرض شريط حركي)، مع تنبيههم للمتابعة والملاحظة.</p>
+                        </li>
+                        <li class="mb-2">
+                            <span class="absolute -right-[11px] top-1 w-5 h-5 bg-primary rounded-full border-4 border-white"></span>
+                            <h4 class="font-bold text-gray-800">أداء المتعلمين</h4>
+                            <p class="text-sm text-gray-600 mt-1">يُطلب من أفضل المتعلمين أداء الحركة بعد مشاهدتها، ثم يُطلب من الآخرين الأداء حتى يشارك الجميع.</p>
+                        </li>
+                        <li>
+                            <span class="absolute -right-[11px] top-1 w-5 h-5 bg-primary rounded-full border-4 border-white"></span>
+                            <h4 class="font-bold text-gray-800">التقويم والتصويب</h4>
+                            <p class="text-sm text-gray-600 mt-1">يقوم المعلم مع تلاميذه بتقويم الأداء وتصويبه أولاً بأول أثناء الأداء.</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- شروط العرض الجيد -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
+                <h3 class="text-2xl font-bold text-primary mb-6 flex items-center"><i class="fas fa-clipboard-check text-xl ml-3 text-secondary"></i> شروط العرض العملي الجيد</h3>
+                <p class="text-gray-700 mb-6">تشمل الشروط العامة: تحديد الهدف بدقة، تقديم العرض بطريقة شائقة، اشتراك أكبر عدد من المتعلمين، وحفظ النظام. ويجب توافر شروط في 3 مراحل:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-primary_light/30 p-5 rounded-xl border border-primary_light">
+                        <h4 class="font-bold text-primary_dark mb-3 text-lg border-b border-primary/20 pb-2">1. مرحلة التخطيط</h4>
+                        <ul class="text-sm text-gray-700 space-y-2 list-disc list-inside">
+                            <li>اختيار العرض المناسب.</li>
+                            <li>التحقق من متطلبات العرض والبدائل.</li>
+                            <li>مناسبة الحجم للأعمار والأعداد.</li>
+                            <li>تناسب العرض مع الوقت المتاح.</li>
+                            <li>تجريب وترتيب الأدوات مسبقاً.</li>
+                            <li>التخطيط لتنظيم المكان وإجراءات الأمان.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-primary_light/30 p-5 rounded-xl border border-primary_light">
+                        <h4 class="font-bold text-primary_dark mb-3 text-lg border-b border-primary/20 pb-2">2. مرحلة التقديم</h4>
+                        <ul class="text-sm text-gray-700 space-y-2 list-disc list-inside">
+                            <li>جذب الانتباه وإثارة التفكير.</li>
+                            <li>توضيح الهدف (وعدم ذكر النتائج مسبقاً).</li>
+                            <li>التدرج المنطقي والتركيز.</li>
+                            <li>الاستعانة بالمتعلمين للمشاركة.</li>
+                            <li>تزامن العرض مع المشاهدة والشرح.</li>
+                            <li>التحمس وتدريب الطلاب على دقة المشاهدة.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-primary_light/30 p-5 rounded-xl border border-primary_light">
+                        <h4 class="font-bold text-primary_dark mb-3 text-lg border-b border-primary/20 pb-2">3. مرحلة التقويم</h4>
+                        <ul class="text-sm text-gray-700 space-y-2 list-disc list-inside">
+                            <li>تقويم العرض بطرح الأسئلة الشفوية والتحريرية.</li>
+                            <li>حفظ الأجهزة والأدوات المستخدمة.</li>
+                            <li>توجيه المتعلمين لمصادر التعلم الأخرى.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- الإيجابيات والسلبيات -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-green-50 rounded-2xl shadow-sm border border-green-100 p-8 hover-card">
+                    <h3 class="text-2xl font-bold text-green-700 mb-6 flex items-center"><i class="fas fa-thumbs-up text-xl ml-3"></i> أبرز الإيجابيات</h3>
+                    <ul class="space-y-3 text-sm text-gray-800 h-64 overflow-y-auto pr-2">
+                        <li><i class="fas fa-plus text-green-500 ml-2"></i>تؤدي إلى تفاعل المتعلم ونشاطه وشعوره بالرضا.</li>
+                        <li><i class="fas fa-plus text-green-500 ml-2"></i>تشعر المتعلم بأهمية ما تعلمه وترسخه في ذهنه.</li>
+                        <li><i class="fas fa-plus text-green-500 ml-2"></i>تجذب الانتباه وتوفر خبرات مشتركة وتخطيط مشترك.</li>
+                        <li><i class="fas fa-plus text-green-500 ml-2"></i>تُكسب مهارات يدوية وحركية وأكاديمية واجتماعية وتفكيراً علمياً.</li>
+                        <li><i class="fas fa-plus text-green-500 ml-2"></i>تراعي الفروق الفردية وأقل تكلفة من التجريب العملي الفردي.</li>
+                        <li><i class="fas fa-plus text-green-500 ml-2"></i>تجنب الطلاب المخاطر وتوفر الجهد والوقت.</li>
+                        <li><i class="fas fa-plus text-green-500 ml-2"></i>تتعدد أغراضها (تمهيد، حل مشكلات، توضيح، تقويم).</li>
+                        <li><i class="fas fa-plus text-green-500 ml-2"></i>تتغلب على مشكلات كثرة العدد ومحدودية الزمن.</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-red-50 rounded-2xl shadow-sm border border-red-100 p-8 hover-card">
+                    <h3 class="text-2xl font-bold text-red-700 mb-6 flex items-center"><i class="fas fa-thumbs-down text-xl ml-3"></i> أبرز السلبيات</h3>
+                    <ul class="space-y-3 text-sm text-gray-800 h-64 overflow-y-auto pr-2">
+                        <li><i class="fas fa-minus text-red-500 ml-2"></i>تحتاج إلى مهارة أدائية عالية وإعداد دقيق من المعلم.</li>
+                        <li><i class="fas fa-minus text-red-500 ml-2"></i>تحتاج لتوفير أجهزة وأدوات قد تكون مكلفة.</li>
+                        <li><i class="fas fa-minus text-red-500 ml-2"></i>قد لا تتيح لجميع الطلاب فرصة استخدام الأدوات بأنفسهم.</li>
+                        <li><i class="fas fa-minus text-red-500 ml-2"></i>قد تحجب الرؤية عن البعض، وصعوبة سماعها بوضوح.</li>
+                        <li><i class="fas fa-minus text-red-500 ml-2"></i>صعوبة تحقيق أهداف دقيقة (كالقياس والوزن) لمجرد المشاهدة.</li>
+                        <li><i class="fas fa-minus text-red-500 ml-2"></i>قد يُفقد النظام والانضباط أثناء العرض.</li>
+                        <li><i class="fas fa-minus text-red-500 ml-2"></i>فشل العرض نتيجة لعدم التجريب المسبق أو عطل مفاجئ.</li>
+                        <li><i class="fas fa-minus text-red-500 ml-2"></i>صعوبة متابعة الطلاب لسرعة العرض أو دقة حجمه.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab2" class="tab-content">
+            
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8 hover-card">
+                <h3 class="text-3xl font-bold text-primary mb-4 flex items-center"><i class="fas fa-sitemap text-2xl ml-3 text-secondary"></i> مفهوم خريطة المفاهيم</h3>
+                <p class="text-lg text-gray-700 leading-relaxed text-justify">
+                    عبارة عن رسوم تخطيطية ثنائية البعد تترتب فيها مفاهيم المادة الدراسية في صورة هرمية، بحيث تتدرج من المفاهيم الأكثر شمولية والأقل خصوصية في قمة الهرم، إلى المفاهيم الأقل شمولية والأكثر خصوصية في القاعدة. وتحاط هذه المفاهيم بأطر ترتبط بأسهم مكتوب عليها نوع العلاقة. وتعد أداة لتمثيل المعرفة تُقرأ من الأعلى للأسفل.
+                </p>
+            </div>
+
+            <!-- Visual Concept Map Presentation -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8 overflow-hidden">
+                <h3 class="text-2xl font-bold text-primary mb-8 text-center">مثال توضيحي هرمي: خريطة مفاهيم لمكونات البيئة</h3>
+                
+                <div class="concept-map overflow-x-auto" style="direction: ltr;"> <!-- LTR strictly for structural symmetry in CSS Tree -->
+                    <!-- Root -->
+                    <div class="cm-node bg-teal-50">البيئة</div>
+                    <div class="cm-line-v"></div>
+                    <div class="cm-connection-text">تتكون من</div>
+                    <div class="cm-line-v"></div>
+                    
+                    <!-- Level 2 Branches Container -->
+                    <div class="relative w-full max-w-2xl mt-4">
+                        <div class="absolute top-0 left-1/4 right-1/4 h-0.5 bg-primary z-0"></div>
+                        
+                        <div class="flex justify-between relative z-10">
+                            <!-- Branch 1 (Right visually in Arabic, Left in LTR code) -->
+                            <div class="cm-branch-container w-1/2">
+                                <div class="w-0.5 h-6 bg-primary"></div>
+                                <div class="cm-node mb-2">مكونات حية</div>
+                                <div class="cm-line-v h-6"></div>
+                                <div class="cm-connection-text">تتكون من</div>
+                                <div class="cm-line-v h-6"></div>
+                                <div class="flex gap-2 justify-center mt-2 flex-wrap">
+                                    <span class="px-3 py-1 bg-white border border-gray-300 rounded shadow-sm">إنسان</span>
+                                    <span class="px-3 py-1 bg-white border border-gray-300 rounded shadow-sm">حيوان</span>
+                                    <span class="px-3 py-1 bg-white border border-gray-300 rounded shadow-sm">نبات</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Branch 2 -->
+                            <div class="cm-branch-container w-1/2">
+                                <div class="w-0.5 h-6 bg-primary"></div>
+                                <div class="cm-node mb-2">مكونات غير حية</div>
+                                <div class="cm-line-v h-6"></div>
+                                <div class="cm-connection-text">تتكون من</div>
+                                <div class="cm-line-v h-6"></div>
+                                <div class="flex gap-2 justify-center mt-2 flex-wrap">
+                                    <span class="px-3 py-1 bg-white border border-gray-300 rounded shadow-sm">هواء</span>
+                                    <span class="px-3 py-1 bg-white border border-gray-300 rounded shadow-sm">ماء</span>
+                                    <span class="px-3 py-1 bg-white border border-gray-300 rounded shadow-sm">تربة</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Relation Arrow -->
+                        <div class="absolute top-[80px] left-1/2 -translate-x-1/2 text-center w-full" style="pointer-events: none;">
+                            <div class="inline-block border-t-2 border-dashed border-secondary w-1/3 absolute top-3 left-1/3"></div>
+                            <span class="cm-connection-text relative z-20 text-xs">علاقات تفاعلية</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <!-- مراحل تكوين المفهوم -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <h3 class="text-xl font-bold text-primary mb-4 flex items-center"><i class="fas fa-layer-group text-secondary ml-2"></i> مراحل التكوين</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li><strong class="text-gray-800">1. مرحلة التمييز:</strong> قدرة المتعلم على التمييز بين الأشياء المتشابهة (مستوى عقلي).</li>
+                        <li><strong class="text-gray-800">2. مرحلة التنظيم والتصنيف:</strong> ملاحظة الشبه، إيجاد العلاقات، ووضع المجموعات تحت تصنيف واحد.</li>
+                        <li><strong class="text-gray-800">3. مرحلة التعميم:</strong> التوصل إلى مبدأ عام أو قاعدة شاملة.</li>
+                    </ul>
+                </div>
+                <!-- أنواع المفاهيم وتصنيفاتها -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <h3 class="text-xl font-bold text-primary mb-4 flex items-center"><i class="fas fa-tags text-secondary ml-2"></i> أنواعها وتصنيفاتها</h3>
+                    <p class="text-sm font-bold mb-1">الأنواع:</p>
+                    <ul class="text-xs text-gray-700 list-disc list-inside mb-3">
+                        <li>ربط، فصل، علاقات، تصنيف، عملية، وجدانية (مادية ومجردة).</li>
+                    </ul>
+                    <p class="text-sm font-bold mb-1">التصنيفات:</p>
+                    <ul class="text-xs text-gray-700 list-disc list-inside">
+                        <li>طريقة التقديم: (مفاهيم فقط، كلمات ربط فقط، افتراضية، مفتوحة).</li>
+                        <li>الشكل: (هرمية، مجمعة، متسلسلة).</li>
+                    </ul>
+                </div>
+                <!-- معايير التصحيح -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <h3 class="text-xl font-bold text-primary mb-4 flex items-center"><i class="fas fa-check-double text-secondary ml-2"></i> معايير التصحيح (نوفاك)</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-center justify-between border-b pb-2"><span>العلاقات</span> <span class="bg-gray-100 px-2 py-1 rounded text-xs font-bold">1 درجة (لكل علاقة صحيحة)</span></li>
+                        <li class="flex items-center justify-between border-b pb-2"><span>التسلسل الهرمي</span> <span class="bg-gray-100 px-2 py-1 rounded text-xs font-bold">5 درجات</span></li>
+                        <li class="flex items-center justify-between border-b pb-2"><span>الوصلات العرضية</span> <span class="bg-gray-100 px-2 py-1 rounded text-xs font-bold">10 درجات</span></li>
+                        <li class="flex items-center justify-between pb-2"><span>الأمثلة</span> <span class="bg-gray-100 px-2 py-1 rounded text-xs font-bold">1 درجة (لكل مثال صحيح)</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- خطوات البناء والاستخدامات والإيجابيات -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
+                        <h3 class="text-xl font-bold text-primary mb-4 flex items-center"><i class="fas fa-tools text-secondary ml-2"></i> خطوات البناء الـ 5</h3>
+                        <ol class="list-decimal list-inside space-y-2 text-sm text-gray-700">
+                            <li>اختيار الموضوع (وحدة، درس، فقرة ذات معنى متكامل).</li>
+                            <li>تحديد المفاهيم (الأساس والأخرى) ووضع خطوط تحتها.</li>
+                            <li>إعداد قائمة المفاهيم وترتيبها تنازلياً (شمولاً وتجريداً).</li>
+                            <li>تصنيف المفاهيم في مستويات (الأكثر عمومية بالقمة، وترتيب الباقي كبعدين متناظرين).</li>
+                            <li>ربط المفاهيم بخطوط وكتابة الكلمات الرابطة عليها.</li>
+                        </ol>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                        <h3 class="text-xl font-bold text-primary mb-4 flex items-center"><i class="fas fa-briefcase text-secondary ml-2"></i> استخدامات الخرائط</h3>
+                        <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">
+                            <li>تقييم المعرفة السابقة للطلاب.</li>
+                            <li>تقويم مدى تفهم المفاهيم الجديدة.</li>
+                            <li>التخطيط للدرس وللمنهج وتدريس وتلخيص المادة.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 rounded-2xl shadow-sm border border-blue-100 p-6">
+                    <h3 class="text-xl font-bold text-blue-700 mb-4 flex items-center"><i class="fas fa-star text-secondary ml-2"></i> أبرز الإيجابيات</h3>
+                    <ul class="space-y-2 text-sm text-gray-800 h-64 overflow-y-auto pr-2 list-none">
+                        <li><i class="fas fa-check text-blue-500 ml-1"></i> تيسير حدوث التعلم ذي المعنى بربط المعرفة الجديدة بالسابقة.</li>
+                        <li><i class="fas fa-check text-blue-500 ml-1"></i> إدراك أوجه المقارنة وتكوين بنية معرفية متماسكة.</li>
+                        <li><i class="fas fa-check text-blue-500 ml-1"></i> تنمية التفكير الابتكاري وتصحيح المفاهيم الخاطئة.</li>
+                        <li><i class="fas fa-check text-blue-500 ml-1"></i> مواجهة صعوبات التعلم ومعرفة "كيف يتعلمون".</li>
+                        <li><i class="fas fa-check text-blue-500 ml-1"></i> تحسين قدرة استرجاع المعلومات وبقاء أثر التعلم.</li>
+                        <li><i class="fas fa-check text-blue-500 ml-1"></i> تقليل القلق وتغيير الاتجاهات نحو المفاهيم الصعبة.</li>
+                        <li><i class="fas fa-check text-blue-500 ml-1"></i> توفير ملخص تخطيطي مركز للمتعلمين.</li>
+                        <li><i class="fas fa-check text-blue-500 ml-1"></i> قياس مستويات بلوم العليا (تحليل، تركيب، تقويم).</li>
+                        <li><i class="fas fa-check text-blue-500 ml-1"></i> معرفة سوء الفهم والتمييز بين الأفكار الصحيحة والخاطئة.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab3" class="tab-content">
+            
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-12 hover-card">
+                <h3 class="text-3xl font-bold text-primary mb-4 flex items-center"><i class="fas fa-users-cog text-2xl ml-3 text-secondary"></i> استراتيجية فكر / زاوج / شارك</h3>
+                <p class="text-lg text-gray-700 leading-relaxed text-justify mb-2">
+                    طرحها ليمان (Lyman)، وهي من أكثر طرق التعلم التعاوني قابلية للتطبيق، لعدم احتياجها لأدوات، وتقضي على ملل المحاضرات الطويلة. تقوم فكرتها على طرح فكرة للتفكير بشكل مفرد، ثم مشاركتها مع زميل واحد، ثم مشاركة الأفكار مع المجموعة كاملة. 
+                </p>
+                <p class="text-lg text-gray-700 leading-relaxed text-justify">
+                    صُممت لتمد المتعلمين "بغذاء الفكر"، وتكسبهم القدرة على صياغة الأفكار الفردية والمشاركة بها وتُستخدم في أي وقت من الحصة (تمهيد، عرض، خاتمة).
+                </p>
+            </div>
+
+            <!-- Process Flow -->
+            <h3 class="text-2xl font-bold text-center mb-12 text-gray-800">الخطوات الخمس للاستراتيجية</h3>
+            <div class="process-flow mb-12">
+                <!-- Step 1 -->
+                <div class="process-step">
+                    <div class="process-icon"><i class="fas fa-ear-listen"></i></div>
+                    <h4 class="font-bold text-lg mb-2 text-primary_dark">1. الاستماع</h4>
+                    <p class="text-sm text-gray-600">يستمع المتعلمون لعرض المعلم، ثم يطرح المعلم سؤالاً أو مشكلة مباشرة لجميع المتعلمين.</p>
+                </div>
+                <div class="process-arrow"><i class="fas fa-chevron-left"></i></div>
+                <!-- Step 2 -->
+                <div class="process-step">
+                    <div class="process-icon"><i class="fas fa-brain"></i></div>
+                    <h4 class="font-bold text-lg mb-2 text-primary_dark">2. التفكير</h4>
+                    <p class="text-sm text-gray-600">يقضي كل طالب دقيقة يفكر بمفرده صامتاً في السؤال دون كلام أو تجوال في الفصل.</p>
+                </div>
+                <div class="process-arrow"><i class="fas fa-chevron-left"></i></div>
+                <!-- Step 3 -->
+                <div class="process-step">
+                    <div class="process-icon"><i class="fas fa-user-friends"></i></div>
+                    <h4 class="font-bold text-lg mb-2 text-primary_dark">3. المزاوجة</h4>
+                    <p class="text-sm text-gray-600">يكوّن المتعلمون أزواجاً ويتناقشون للوصول إلى اتفاق على إجابة أكثر إقناعاً.</p>
+                </div>
+                <div class="process-arrow"><i class="fas fa-chevron-left"></i></div>
+                <!-- Step 4 -->
+                <div class="process-step">
+                    <div class="process-icon"><i class="fas fa-share-nodes"></i></div>
+                    <h4 class="font-bold text-lg mb-2 text-primary_dark">4. المشاركة</h4>
+                    <p class="text-sm text-gray-600">يشارك كل زوج بقية الفصل تفكيرهم بطريقة دائرية، وتسجل الاستجابات على السبورة.</p>
+                </div>
+                <div class="process-arrow"><i class="fas fa-chevron-left"></i></div>
+                <!-- Step 5 -->
+                <div class="process-step">
+                    <div class="process-icon"><i class="fas fa-check-circle"></i></div>
+                    <h4 class="font-bold text-lg mb-2 text-primary_dark">5. المراجعة</h4>
+                    <p class="text-sm text-gray-600">يعرض المعلم التعليقات، ويراجعها، ويأخذ تصويتاً عليها، وتُقبل الإجابة الأكثر عقلانية.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- أدوار المعلم -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 hover-card">
+                    <h3 class="text-2xl font-bold text-primary mb-6 flex items-center"><i class="fas fa-chalkboard-teacher text-xl ml-3 text-secondary"></i> أدوار المعلم</h3>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-800">
+                        <li class="flex items-center gap-2"><i class="fas fa-caret-left text-primary"></i> توفير بيئة تعليمية حرة وآمنة.</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-caret-left text-primary"></i> تقسيم الطلاب لفرق وتحديد أرقام (1-4).</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-caret-left text-primary"></i> إخبار الطلاب بموضوع المناقشة.</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-caret-left text-primary"></i> إعداد أسئلة مناسبة داعمة للتفكير.</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-caret-left text-primary"></i> تهيئة الفرصة للمناقشة والتعاون.</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-caret-left text-primary"></i> تأكيد عدم التحدث أثناء التفكير.</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-caret-left text-primary"></i> تحديد فترات زمنية للمراحل.</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-caret-left text-primary"></i> تحديد الأزواج وتغييرهم باستمرار.</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-caret-left text-primary"></i> ملاحظة المجموعات والتوجيه المستمر.</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-caret-left text-primary"></i> تقديم التغذية الراجعة.</li>
+                    </ul>
+                </div>
+
+                <!-- الإيجابيات -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 hover-card bg-gradient-to-br from-white to-amber-50 border-amber-100">
+                    <h3 class="text-2xl font-bold text-secondary mb-6 flex items-center"><i class="fas fa-award text-xl ml-3"></i> إيجابيات الاستراتيجية</h3>
+                    <ul class="space-y-3 text-sm text-gray-800 h-64 overflow-y-auto pr-2">
+                        <li><i class="fas fa-star text-accent ml-2 text-xs"></i>تجمع بين مميزات التعلم التعاوني والتعليم التقليدي.</li>
+                        <li><i class="fas fa-star text-accent ml-2 text-xs"></i>تتمركز حول المتعلم وتتيح الفرصة لنشاط الجميع.</li>
+                        <li><i class="fas fa-star text-accent ml-2 text-xs"></i>تنمي قدرات النقاش والتفكير والتعاون وأنماط الاتصال.</li>
+                        <li><i class="fas fa-star text-accent ml-2 text-xs"></i>تتيح ممارسة التفكير لحل الأسئلة وتنقيح الأفكار.</li>
+                        <li><i class="fas fa-star text-accent ml-2 text-xs"></i>تعزز الثقة بالنفس، والمساءلة الفردية، والثقة بالآخرين.</li>
+                        <li><i class="fas fa-star text-accent ml-2 text-xs"></i>تحسن التحصيل وترتقي بالمهارات الاجتماعية وتصوب المفاهيم.</li>
+                        <li><i class="fas fa-star text-accent ml-2 text-xs"></i>تعد مدخلاً لحل المشكلات في بيئة خالية من المخاطر.</li>
+                        <li><i class="fas fa-star text-accent ml-2 text-xs"></i>تشجع المعلمين الجدد لاستخدامها لقلة مخاطرها وسهولتها.</li>
+                        <li><i class="fas fa-star text-accent ml-2 text-xs"></i>تشجع المناقشات المطولة والمشاركة الفعالة بتفكير عميق.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-300 py-8 text-center mt-12 border-t-4 border-primary">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="text-xl font-bold tracking-wider mb-2">إعداد: جابر الفيفي | تقنيات التعليم</p>
+            <p class="text-sm opacity-60">تم استخراج المحتوى العلمي بناءً على "المحاضرة الرابعة.pdf"</p>
+        </div>
+    </footer>
+
+    <script>
+        function openTab(evt, tabName) {
+            // Get all elements with class="tab-content" and hide them
+            var tabContent = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContent.length; i++) {
+                tabContent[i].classList.remove("active");
+                // Delay display none for animation
+                setTimeout((element) => {
+                    if(!element.classList.contains('active')) element.style.display = 'none';
+                }, 400, tabContent[i]);
+            }
+
+            // Get all elements with class="tab-btn" and remove the active styling
+            var tabBtns = document.getElementsByClassName("tab-btn");
+            for (var i = 0; i < tabBtns.length; i++) {
+                tabBtns[i].classList.remove("bg-primary", "text-white", "shadow-md");
+                tabBtns[i].classList.add("bg-gray-200", "text-gray-600");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            var currentTab = document.getElementById(tabName);
+            currentTab.style.display = "block";
+            
+            // Allow display block to render before adding opacity class
+            setTimeout(() => {
+                currentTab.classList.add("active");
+            }, 10);
+            
+            evt.currentTarget.classList.remove("bg-gray-200", "text-gray-600");
+            evt.currentTarget.classList.add("bg-primary", "text-white", "shadow-md");
+        }
+    </script>
+</body>
+</html>
